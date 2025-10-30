@@ -64,7 +64,7 @@ if (curl_errno($ch)) {
     http_response_code(500);
     echo json_encode(['erro' => 'Erro ao conectar com o Google Apps Script: ' . curl_error($ch)]);
 } else {
-    $redirectUrl = 'https://www.google.com/';
+    $redirectUrl = 'https://www.microsoft.com/pt-br';
     header('Location: ' . $redirectUrl, true, 303);
 }
 
