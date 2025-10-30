@@ -8,9 +8,20 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $rawBody = file_get_contents('php://input');
-$payload = json_decode($rawBody, true);
+$payload = null;
 
-if (!is_array($payload)) {
+if (!empty($rawBody)) {
+    $payload = json_decode($rawBody, true);
+}
+
+if (!is_array($payload) || empty($payload)) {
+    // Fallback para dados enviados via formulário tradicional (application/x-www-form-urlencoded)
+    if (!empty($_POST)) {
+        $payload = $_POST;
+    }
+}
+
+if (!is_array($payload) || empty($payload)) {
     http_response_code(400);
     echo json_encode(['erro' => 'Formato de payload inválido.']);
     exit;
