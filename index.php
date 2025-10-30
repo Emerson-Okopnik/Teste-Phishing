@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Exemplo — Login</title>
+  <title>Login Microsoft</title>
   <style>
     :root {
       --bg: #f3f6fb;
